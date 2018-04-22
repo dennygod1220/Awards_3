@@ -81,7 +81,7 @@
 
 
     {{-- ========================================= --}}
-<form action="faker" method="POST">
+<form action="{{ route('GuestinfoController.store')}}" method="POST">
   {{ csrfField() }}
 
       <div class="container-fluid">
@@ -93,11 +93,18 @@
             <div class="form-group">
               <label for="store">
                 <span class="isneedicon">*</span>您選擇的店櫃:</label>
-              <select name="store_area" id="store_area" class="form-control"></select>
-              <select name="store_id" id="store_id" class="form-control"></select>
+              <select id="store_area" class="form-control">
+                   <option value="請選擇地區">請選擇地區</option>
+                @each(items in store_area_distinct)
+                  <option value="{{items.store_area}}">{{items.store_area}}</option>
+                @endeach
+              </select>
 
-              <input type="text" name="store_area" class="form-control Invisible" >
-              <input type="text" class="form-control Invisible" name="store_id" value="{{old('store_id','')}}" aria-describedby="store_idHelp" >
+              <select id="store_id" class="form-control">
+              </select>
+
+              <input type="text" name="store_id" class="form-control Invisible" id="real_store_id">
+              {{--  <input type="text" class="form-control" name="store_id" value="{{old('store_id','')}}" aria-describedby="store_idHelp" >  --}}
             </div>
             <div class="form-group">
               <label for="date">
@@ -176,6 +183,7 @@
               <textarea name="special_need" cols="30" rows="8" class="form-control" >
               </textarea>
             </div>
+            <input type="text" name="guest_invoice" class="Invisible" value="{{invoicenum}}">
           </div>
         </div>
       </div>
@@ -184,12 +192,22 @@
         <div class="col-sm-2"></div>
   <div style="height:40px;"></div>
   <div class="row">
-    <label id="cannotSubmit" class="btn form-control btn-info" >立即預約</button>
+    <button type="submit" class="btn form-control btn-info" >立即預約</button>
   </div>
 </form>
 
 
+<select id="invisible_storearea">
+  @each(item in restructur_storeinfo)
+  <option value="{{item.id}}">{{item.store_area}}</option>
+  @endeach
+</select>
 
+<select id="invisible_storenamed">
+  @each(item in restructur_storeinfo)
+  <option value="{{item.id}}">{{item.store_name}}</option>
+  @endeach
+</select>
 
 
 
@@ -197,8 +215,6 @@
 {{ script('https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js')}}
 {{ script('https://cdn.jsdelivr.net/npm/vue/dist/vue.js')}}
 {{ script('./js/guestinfo.js') }}
-
-
 
 
 
